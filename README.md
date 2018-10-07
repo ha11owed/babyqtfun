@@ -3,7 +3,28 @@
 
 # Baby QT Fun
 
-`babyqtfun` is a keyboard smasher for babies. It allows the baby to smash the keyboard wihile providing visual feedback.
+`babyqtfun` is a keyboard smasher for babies.
+It creates a transparent, always on top, fullscreen window the selected screen, thus catching the keyboard and mouse input.
+Whenever a key is pressed the program will randomly create a bubble on top of the desktop.
+
+# Usage
+
+```console
+Baby QT keyboard basher for a fun time!
+
+Options:
+  -h, --help               Displays this help.
+  -s, --screen <screen>    The index of the screen to use for displaying the
+                           application (relevant for multi-displays).
+  -b, --bubbles <bubbles>  The maximum number of bubbles to display.
+  -z, --zoom <zoom>        The zoom for the bubbles (1.0 means normal zoom).
+```
+
+![screenshot of the basic usage](images/usage01.png)
+
+# Technical issues
+
+The program was developed in Qt + Qml on a Debian buster OS with the help of QtCreator.
 
 # License
 

@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>bubble.qml</file>
+        <file>main.qml</file>
+        <file>gfx/catch-action.png</file>
+        <file>gfx/catch.png</file>
+        <file>gfx/melee-idle.png</file>
+    </qresource>
+</RCC>
