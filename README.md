@@ -20,6 +20,8 @@ Options:
   -z, --zoom <zoom>        The zoom for the bubbles (1.0 means normal zoom).
 ```
 
+Below is a screenshot of the program in action. Once started, the mouse will not do anything anymore and the pressing the keyboard will create bubbles that move randomly and pop after a short amount of time.
+
 ![screenshot of the basic usage](images/usage01.png)
 
 ## Technical issues
