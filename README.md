@@ -1,13 +1,13 @@
 # babyqtfun
-=====
 
-# Baby QT Fun
+## Baby QT Fun
 
 `babyqtfun` is a keyboard smasher for babies.
-It creates a transparent, always on top, fullscreen window the selected screen, thus catching the keyboard and mouse input.
+
+It creates a **transparent**, **always on top**, **fullscreen** window on the selected screen, thus catching the keyboard and mouse input. \
 Whenever a key is pressed the program will randomly create a bubble on top of the desktop.
 
-# Usage
+## Usage
 
 ```console
 Baby QT keyboard basher for a fun time!
@@ -22,11 +22,11 @@ Options:
 
 ![screenshot of the basic usage](images/usage01.png)
 
-# Technical issues
+## Technical issues
 
 The program was developed in Qt + Qml on a Debian buster OS with the help of QtCreator.
 
-# License
+## License
 
 The code is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
 
