@@ -24,7 +24,7 @@ Below is a screenshot of the program in action. Once started, the mouse will not
 
 ![screenshot of the basic usage](images/usage01.png)
 
-## Technical issues
+## Technical details
 
 The program was developed in Qt + Qml on a Debian buster OS with the help of QtCreator.
 
