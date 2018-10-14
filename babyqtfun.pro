@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT      += core qml quick
+QT      += core qml quick multimedia
 TARGET   = babyqtfun
 TEMPLATE = app
 
@@ -24,12 +24,14 @@ SOURCES += \
     main.cpp \
     effect.cpp \
     effectmanager.cpp \
-    uicontext.cpp
+    uicontext.cpp \
+    videomanager.cpp
 
 HEADERS += \
     effect.h \
     effectmanager.h \
-    uicontext.h
+    uicontext.h \
+    videomanager.h
 
 RESOURCES += \
     babyqtfun.qrc

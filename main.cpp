@@ -3,8 +3,13 @@
 #include <QtQml/QQmlApplicationEngine>
 #include <QTimer>
 #include <QQuickWindow>
+#include <QQmlContext>
+
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 
 #include "effectmanager.h"
+#include "videomanager.h"
 
 int main(int argc, char **argv)
 {
@@ -17,10 +22,11 @@ int main(int argc, char **argv)
     // This operation must be done before creating the window.
     QQuickWindow::setDefaultAlphaBuffer(true);
 
-    EffectManager manager;
+    VideoManager videoManager;
+    EffectManager effectManager;
     engine.load("qrc:///main.qml");
 
-    for(;;)
+    for (;;)
     {
         int screenIndex = -1;
 
@@ -39,10 +45,15 @@ int main(int argc, char **argv)
                                          QCoreApplication::translate("main", "The zoom for the bubbles (1.0 means normal zoom)."),
                                          QCoreApplication::translate("main", "zoom"),
                                          QString::number(1.0));
+        QCommandLineOption videosOption("video_dir",
+                                         QCoreApplication::translate("main", "A directory to load videos from."),
+                                         QCoreApplication::translate("main", "video directory path"),
+                                         QString(""));
 
         parser.addOption(screenOption);
         parser.addOption(bubblesOption);
         parser.addOption(zoomOption);
+        parser.addOption(videosOption);
 
         parser.process(app);
 
@@ -52,14 +63,14 @@ int main(int argc, char **argv)
             bool ok = true;
             QString screenValue = screenValues.at(0);
             screenIndex = screenValue.toInt(&ok);
-            if(!ok)
+            if (!ok)
             {
                 qCritical() << "The screen index must be an integer. The value " << screenValue << " is invalid.";
                 break;
             }
 
             int nScreens = QGuiApplication::screens().size();
-            if(screenIndex >= nScreens)
+            if (screenIndex >= nScreens)
             {
                 qCritical() << "The screen index is out of range. The available number of screens is" << nScreens;
                 break;
@@ -72,7 +83,7 @@ int main(int argc, char **argv)
             int bubblesCount = bubblesValue.toInt(&ok);
             if (ok)
             {
-                manager.context()->maxBubbles = bubblesCount;
+                effectManager.context()->maxBubbles = bubblesCount;
             }
         }
 
@@ -82,9 +93,12 @@ int main(int argc, char **argv)
             float zoom = zoomValue.toFloat(&ok);
             if (ok)
             {
-                manager.context()->zoom = zoom;
+                effectManager.context()->zoom = zoom;
             }
         }
+
+        QString videosValue = parser.value(videosOption);
+        videoManager.setVideoDirectory(videosValue);
 
         // Init the window
         QQuickWindow* mainWindow = nullptr;
@@ -93,7 +107,7 @@ int main(int argc, char **argv)
             QObject* rootObj = engine.rootObjects().at(0);
             mainWindow = qobject_cast<QQuickWindow*>(rootObj);
 
-            if(screenIndex >= 0)
+            if (screenIndex >= 0)
             {
                 mainWindow->setScreen(QGuiApplication::screens().at(screenIndex));
                 qInfo() << "Selecting screen" << screenIndex;
@@ -104,13 +118,23 @@ int main(int argc, char **argv)
             mainWindow->setVisible(true);
             mainWindow->setWindowState(Qt::WindowFullScreen);
 
-            manager.context()->init(mainWindow, &engine);
+            // Videos
+            if (videoManager.playlist()->mediaCount() > 0)
+            {
+                QObject* qmlMediaPlayer = mainWindow->findChild<QObject*>("mp");
+                QMediaPlayer* mediaPlayer = qvariant_cast<QMediaPlayer*>(qmlMediaPlayer->property("mediaObject"));
+                mediaPlayer->setPlaylist(videoManager.playlist());
+                mediaPlayer->play();
+            }
+
+            // Effects
+            effectManager.context()->init(mainWindow, &engine);
             QObject::connect(mainWindow, SIGNAL(qmlSignal(QVariant)),
-                             &manager, SLOT(cppSlot(QVariant)));
+                             &effectManager, SLOT(cppSlot(QVariant)));
 
             QTimer *timer = new QTimer(&app);
             QObject::connect(timer, SIGNAL(timeout()),
-                             &manager, SLOT(tick()));
+                             &effectManager, SLOT(tick()));
             timer->start(50);
         }
         else
